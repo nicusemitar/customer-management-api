@@ -1,6 +1,9 @@
 package com.rsystems.customer.management.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.rsystems.customer.management.entity.Customer;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Data Transfer Object for creating a new customer.
@@ -9,7 +12,11 @@ import com.rsystems.customer.management.entity.Customer;
  * @param name        the name of the customer
  * @param phoneNumber the phone number of the customer
  */
-public record CreateCustomerDTO(Long id, String name, String phoneNumber) {
+@JsonIgnoreProperties(ignoreUnknown = false)
+public record CreateCustomerDTO(
+        @NotNull(message = "ID is required") Long id,
+        @NotBlank(message = "Name is required") String name,
+        @NotBlank(message = "Phone number is required") String phoneNumber) {
 
     /**
      * Converts a Customer entity to a CreateCustomerDTO.

@@ -82,6 +82,10 @@ public interface CustomerController {
                             content = @Content(
                                     schema = @Schema(implementation = UpdateCustomerDTO.class)
                             )
+                    ),
+                    @ApiResponse(
+                            description = "Invalid input",
+                            responseCode = "400"
                     )
             }
     )

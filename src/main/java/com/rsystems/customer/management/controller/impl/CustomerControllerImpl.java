@@ -5,6 +5,8 @@ import com.rsystems.customer.management.dto.CreateCustomerDTO;
 import com.rsystems.customer.management.dto.UpdateCustomerDTO;
 import com.rsystems.customer.management.entity.Customer;
 import com.rsystems.customer.management.service.impl.CustomerServiceImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/v1/customers")
+@Tag(name = "Customer Controller")
 public class CustomerControllerImpl implements CustomerController {
 
     private final CustomerServiceImpl customerService;
@@ -56,7 +59,7 @@ public class CustomerControllerImpl implements CustomerController {
      * @return a ResponseEntity containing the newly created customer and an HTTP status of CREATED
      */
     @PostMapping("")
-    public ResponseEntity<Customer> createCustomer(@RequestBody CreateCustomerDTO customerDTO) {
+    public ResponseEntity<Customer> createCustomer(@Valid @RequestBody CreateCustomerDTO customerDTO) {
         Customer newCustomer = customerService.addCustomer(customerDTO);
         return new ResponseEntity<>(newCustomer, HttpStatus.CREATED);
     }
@@ -68,7 +71,7 @@ public class CustomerControllerImpl implements CustomerController {
      * @return a ResponseEntity containing the updated customer and an HTTP status of OK
      */
     @PutMapping("")
-    public ResponseEntity<UpdateCustomerDTO> updateCustomer(@RequestBody UpdateCustomerDTO updateCustomerDTO) {
+    public ResponseEntity<UpdateCustomerDTO> updateCustomer(@Valid @RequestBody UpdateCustomerDTO updateCustomerDTO) {
         UpdateCustomerDTO updatedCustomer = UpdateCustomerDTO.toDTO(customerService.updateCustomer(updateCustomerDTO));
         return new ResponseEntity<>(updatedCustomer, HttpStatus.OK);
     }

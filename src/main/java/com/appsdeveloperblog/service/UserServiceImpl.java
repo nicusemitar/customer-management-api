@@ -1,6 +1,7 @@
 package com.appsdeveloperblog.service;
 
 import com.appsdeveloperblog.io.UsersDatabase;
+import com.appsdeveloperblog.model.User;
 
 import java.util.Map;
 import java.util.UUID;
@@ -24,7 +25,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Map updateUser(String userId, Map userDetails) {
         Map existingUser = usersDatabase.find(userId);
-        if(existingUser == null) throw new IllegalArgumentException("User not found");
+        if (existingUser == null) throw new IllegalArgumentException("User not found");
 
         existingUser.put("firstName", userDetails.get("firstName"));
         existingUser.put("lastName", userDetails.get("lastName"));
@@ -40,8 +41,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(String userId) {
         Map existingUser = usersDatabase.find(userId);
-        if(existingUser == null) throw new IllegalArgumentException("User not found");
+        if (existingUser == null) throw new IllegalArgumentException("User not found");
 
         usersDatabase.delete(userId);
+    }
+
+    public User createUserByInstance(User user) {
+        if (user.getFirstName().isBlank()) throw new IllegalArgumentException("User's first name cannot be empty");
+        return user;
     }
 }

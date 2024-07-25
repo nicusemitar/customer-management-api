@@ -2,6 +2,7 @@ package com.appsdeveloperblog.service;
 
 import com.appsdeveloperblog.io.UsersDatabase;
 import com.appsdeveloperblog.io.UsersDatabaseMapImpl;
+import com.appsdeveloperblog.model.User;
 import org.junit.jupiter.api.*;
 
 import java.util.HashMap;
@@ -90,5 +91,21 @@ class UserServiceImplTest {
         //Assert
         assertNull(userServiceImpl.getUserDetails(createdUserId));
     }
+
+    @Test
+    @Order(5)
+    @DisplayName("User's first name is empty")
+    void testCreateUserWithEmptyFirstName_throwsException() {
+        // Arrange
+        User user = new User("1", "", "Nick", "nick@gmail.com");
+
+        // Act
+        IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class,
+                () -> userServiceImpl.createUserByInstance(user));
+
+        //Assert
+        assertEquals("User's first name cannot be empty", illegalArgumentException.getMessage());
+    }
+
 
 }

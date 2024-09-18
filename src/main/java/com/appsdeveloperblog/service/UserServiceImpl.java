@@ -1,53 +1,32 @@
 package com.appsdeveloperblog.service;
 
-import com.appsdeveloperblog.io.UsersDatabase;
+import com.appsdeveloperblog.exception.UserServiceException;
 import com.appsdeveloperblog.model.User;
-
-import java.util.Map;
-import java.util.UUID;
+import com.appsdeveloperblog.repo.UserRepositoryImpl;
 
 public class UserServiceImpl implements UserService {
 
-    UsersDatabase usersDatabase;
+    UserRepositoryImpl userRepository;
+    EmailNotificationServiceImpl emailNotificationService;
 
-    public UserServiceImpl(UsersDatabase usersDatabase) {
-        this.usersDatabase = usersDatabase;
+    public UserServiceImpl(UserRepositoryImpl userRepository, EmailNotificationServiceImpl emailNotificationService) {
+        this.userRepository = userRepository;
+        this.emailNotificationService = emailNotificationService;
     }
 
     @Override
-    public String createUser(Map userDetails) {
-        String userId = UUID.randomUUID().toString();
-        userDetails.put("userId", userId);
-        usersDatabase.save(userId, userDetails);
-        return userId;
-    }
+    public User createUser(User user) throws UserServiceException {
+        if (user == null) throw new IllegalArgumentException("User can not be null");
+        boolean isUserCreated = userRepository.save(user);
+        if (!isUserCreated) throw new UserServiceException("Could not create user");
 
-    @Override
-    public Map updateUser(String userId, Map userDetails) {
-        Map existingUser = usersDatabase.find(userId);
-        if (existingUser == null) throw new IllegalArgumentException("User not found");
-
-        existingUser.put("firstName", userDetails.get("firstName"));
-        existingUser.put("lastName", userDetails.get("lastName"));
-
-        return usersDatabase.update(userId, existingUser);
-    }
-
-    @Override
-    public Map getUserDetails(String userId) {
-        return usersDatabase.find(userId);
-    }
-
-    @Override
-    public void deleteUser(String userId) {
-        Map existingUser = usersDatabase.find(userId);
-        if (existingUser == null) throw new IllegalArgumentException("User not found");
-
-        usersDatabase.delete(userId);
-    }
-
-    public User createUserByInstance(User user) {
-        if (user.getFirstName().isBlank()) throw new IllegalArgumentException("User's first name cannot be empty");
+        try {
+            emailNotificationService.scheduleEmailConfirmation(user);
+        } catch (RuntimeException exception) {
+            throw new UserServiceException(exception.getMessage());
+        }
         return user;
     }
+
+
 }

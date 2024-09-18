@@ -1,10 +1,8 @@
 package com.appsdeveloperblog.service;
 
-import java.util.Map;
+import com.appsdeveloperblog.exception.UserServiceException;
+import com.appsdeveloperblog.model.User;
 
 public interface UserService {
-    String createUser(Map userDetails);
-    Map updateUser(String userId, Map userDetails);
-    Map getUserDetails(String userId);
-    void deleteUser(String userId);
+    User createUser(User user) throws UserServiceException;
 }

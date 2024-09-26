@@ -1,6 +1,7 @@
 package com.appsdeveloperblog.service;
 
-import com.appsdeveloperblog.model.User;
+
+import com.rsystems.customer.management.entity.User;
 
 public class EmailNotificationServiceImpl implements EmailNotificationService {
     @Override

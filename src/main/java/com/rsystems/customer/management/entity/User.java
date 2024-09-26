@@ -1,24 +1,41 @@
-package com.appsdeveloperblog.model;
+package com.rsystems.customer.management.entity;
 
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
+@Entity
+@Table(name = "users")
 public class User {
-    private String id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
+    @SequenceGenerator(name = "user_seq", sequenceName = "user_sequence", allocationSize = 1)
+    private Long id;
+
+    @Column
     private String firstName;
+
+    @Column
     private String lastName;
+
+    @Column
+    @Email
     private String email;
 
-    public User(String id, String firstName, String lastName, String email) {
-        this.id = id;
+    public User() {
+
+    }
+
+    public User(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getFirstName() {

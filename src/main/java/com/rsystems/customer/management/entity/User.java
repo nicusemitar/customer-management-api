@@ -3,9 +3,8 @@ package com.rsystems.customer.management.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 
-@Entity
+@Entity(name = "Users")
 @Table(name = "users")
 public class User {
 
@@ -21,7 +20,7 @@ public class User {
     private String lastName;
 
     @Column
-    @Email
+    @Email(message = "must be a well-formed email address")
     private String email;
 
     public User() {

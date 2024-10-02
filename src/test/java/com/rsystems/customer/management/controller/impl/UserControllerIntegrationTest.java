@@ -1,7 +1,6 @@
 package com.rsystems.customer.management.controller.impl;
 
 import com.rsystems.customer.management.entity.User;
-import jakarta.transaction.Transactional;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;

@@ -12,39 +12,37 @@ public class ReservationService {
 
         HashMap<Integer, Integer> counter = new HashMap<>();
 
+        // Count active reservations per day
         for (ReservationEntity entity : entities) {
-            int checkinDate = entity.getCheckInDate() == 0 ? entity.getCheckInDate() + 1 : entity.getCheckInDate();
-
-            for (int i = checkinDate; i <= entity.getCheckoutDate() - 1; i++) {
-                if (counter.containsKey(i)) {
-                    counter.put(i, counter.get(i) + 1);
-                    //put if absent ?
-                } else {
-                    counter.put(i, 1);
-                }
+            for (int i = entity.getCheckInDate(); i < entity.getCheckoutDate(); i++) {
+                counter.merge(i, 1, Integer::sum);
             }
-
         }
+
+        double average = calculateDesiredDaysAverage(counter, 7);
+
+        List<Integer> daysWithLessActiveReservation = new ArrayList<>();
+
+        for (Map.Entry<Integer, Integer> entry : counter.entrySet()) {
+            int day = entry.getKey();
+
+            if (day > 7 && entry.getValue() < average) {
+                daysWithLessActiveReservation.add(day);
+            }
+        }
+
+        return daysWithLessActiveReservation;
+    }
+
+    // Compute 7-day rolling average
+    private static double calculateDesiredDaysAverage(HashMap<Integer, Integer> counter, int desiredDays) {
         double sum = 0.0;
         int count = 0;
         for (Integer value : counter.values()) {
-            if (count >= 7) break;
+            if (count >= desiredDays) break;
             sum += value;
             count++;
         }
-        double average = count > 0 ? sum / count : 0;
-
-        List<Integer> activeReservation = new ArrayList<>();
-
-        for (Map.Entry<Integer, Integer> entry : counter.entrySet()) {
-            if (entry.getKey() > 7) {
-                boolean isLess = entry.getValue() < average;
-                if (isLess) {
-                    activeReservation.add(entry.getKey());
-                }
-            }
-        }
-
-        return activeReservation;
+        return count > 0 ? sum / count : 0;
     }
 }

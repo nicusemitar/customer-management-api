@@ -6,8 +6,8 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
 
-        ReservationEntity r1 = new ReservationEntity(123, 0, 6);
-        ReservationEntity r2 = new ReservationEntity(435, 3, 7);
+        ReservationEntity r1 = new ReservationEntity(435, 3, 7);
+        ReservationEntity r2 = new ReservationEntity(123, 0, 6);
         ReservationEntity r3 = new ReservationEntity(444, 2, 13);
         ReservationEntity r4 = new ReservationEntity(532, 5, 9);
         ReservationEntity r5 = new ReservationEntity(232, 9, 12);
